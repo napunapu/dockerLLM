@@ -25,13 +25,32 @@ fi
 # Move text-generation-webui's folder to $VOLUME so models and all config will persist
 "$SCRIPTDIR"/textgen-on-workspace.sh
 
+# Model download
+MODEL="https://huggingface.co/TheBloke/Phind-CodeLlama-34B-v2-GGUF/resolve/main/phind-codellama-34b-v2.Q5_K_M.gguf"
+
+# Define the target directory and filename
+DIR="text-generation-webui/models"
+FILENAME="phind-codellama-34b-v2.Q5_K_M.gguf"
+
+# Full path of the file
+FILEPATH="$VOLUME/$DIR/$FILENAME"
+
+# Check if the file does not exist in the directory
+if [ ! -f "$FILEPATH" ]; then
+    echo "Downloading $FILENAME..."
+    "$SCRIPTDIR"/fetch-model.py "$MODEL" $VOLUME/text-generation-webui/models >>$VOLUME/logs/fetch-model.log 2>&1
+else
+    echo "File $FILENAME already exists in $DIR."
+fi
+
 # If passed a MODEL variable from Runpod template, start it downloading
 # This will block the UI until completed
 # MODEL can be a HF repo name, eg 'TheBloke/guanaco-7B-GPTQ'
 # or it can be a direct link to a single GGML file, eg 'https://huggingface.co/TheBloke/tulu-7B-GGML/resolve/main/tulu-7b.ggmlv3.q2_K.bin'
-if [[ $MODEL ]]; then
-	"$SCRIPTDIR"/fetch-model.py "$MODEL" $VOLUME/text-generation-webui/models >>$VOLUME/logs/fetch-model.log 2>&1
-fi
+#if [[ $MODEL ]]; then
+#	"$SCRIPTDIR"/fetch-model.py "$MODEL" $VOLUME/text-generation-webui/models >>$VOLUME/logs/fetch-model.log 2>&1
+#fi
+
 
 # Update text-generation-webui to the latest commit
 cd /workspace/text-generation-webui && git pull

@@ -11,5 +11,7 @@ else
 	rm -rf /root/text-generation-webui
 fi
 
+cp /root/credentials /workspace
+
 # Then link /root/text-generation-webui folder to /workspace so it's available in that familiar location as well
 ln -s /workspace/text-generation-webui /root/text-generation-webui

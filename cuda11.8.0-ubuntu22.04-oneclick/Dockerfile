@@ -13,6 +13,9 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends $APTPKGS && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+RUN apt-get upgrade -y
+RUN apt update -y && apt upgrade -y
+RUN apt install nano
 
 # Set up git to support LFS, and to store credentials; useful for Huggingface Hub
 RUN git config --global credential.helper store && \
@@ -32,6 +35,10 @@ COPY conf-files/iterm2_shell_integration.zsh /root/.iterm2_shell_integration.zsh
 COPY conf-files/passwd /etc/passwd
 
 COPY scripts /root/scripts
+RUN cd /root/scripts
+RUN pip install rich
+RUN cd ..
+COPY conf-files/credentials /root/credentials
 
 COPY --chmod=755 start-with-ui.sh /start.sh
 
