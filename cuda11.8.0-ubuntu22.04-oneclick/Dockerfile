@@ -37,6 +37,7 @@ COPY conf-files/passwd /etc/passwd
 COPY scripts /root/scripts
 RUN cd /root/scripts
 RUN pip install rich
+RUN pip install --upgrade gradio 
 RUN cd ..
 COPY conf-files/credentials /root/credentials
 
